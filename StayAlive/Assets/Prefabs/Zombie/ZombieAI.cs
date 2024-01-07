@@ -33,6 +33,14 @@ public class ZombieAI : MonoBehaviour
 
     private bool isCoroutineRunning = false;
 
+
+    private void Start()
+    {
+
+        if (_player == null)
+            _player = GameObject.FindGameObjectWithTag("Player");
+    }
+
     public void Damaged(int hp)
     {
         if (isAlive())
