@@ -21,13 +21,14 @@ public class PickUpController : MonoBehaviour
 
     [SerializeField]
     private bool equipped;
-    [SerializeField]
     private static bool slotFull;
     
     [SerializeField]
     private TextMeshProUGUI ammunitionDisplay;
     [SerializeField]
     private Button shootButton;
+    [SerializeField]
+    private Button pickUpButton;
 
     private void Start()
     {
@@ -39,6 +40,7 @@ public class PickUpController : MonoBehaviour
             coll.isTrigger = false;
             ammunitionDisplay.enabled = false;
             shootButton.gameObject.SetActive(false);
+            pickUpButton.gameObject.SetActive(false);
         }
         if (equipped)
         {
@@ -48,6 +50,7 @@ public class PickUpController : MonoBehaviour
             slotFull = true;
             ammunitionDisplay.enabled = true;
             shootButton.gameObject.SetActive(true);
+            pickUpButton.gameObject.SetActive(false);
         }
     }
 
@@ -55,12 +58,24 @@ public class PickUpController : MonoBehaviour
     {
         //Check if player is in range and "E" is pressed
         Vector3 distanceToPlayer = player.position - transform.position;
+        
+        if(!equipped && distanceToPlayer.magnitude <= pickUpRange && !slotFull)pickUpButton.gameObject.SetActive(true);
+        else if(equipped || distanceToPlayer.magnitude >= pickUpRange)
+        {
+            pickUpButton.gameObject.SetActive(false);
+        }
+        
         if (!equipped && distanceToPlayer.magnitude <= pickUpRange && Input.GetKeyDown(KeyCode.E) && !slotFull) PickUp();
 
         //Drop if equipped and "Q" is pressed
         if (equipped && Input.GetKeyDown(KeyCode.Q)) Drop();
     }
 
+    public void Change()
+    {
+        
+    }
+    
     private void PickUp()
     {
         gunScript.enabled = true;
@@ -102,5 +117,6 @@ public class PickUpController : MonoBehaviour
         
         ammunitionDisplay.enabled = false;
         shootButton.gameObject.SetActive(false);
+        pickUpButton.gameObject.SetActive(false);
     }
 }

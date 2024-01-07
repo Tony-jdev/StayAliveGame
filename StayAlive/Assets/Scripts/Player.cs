@@ -5,22 +5,23 @@ public class Player : MonoBehaviour
 {
     [SerializeField]
     private int _health = 100;
-
+    [SerializeField]
+    private HealthBar _healthBarScript;
 
     public void AddDamage(int hp)
     {
         _health -= hp;
-        Debug.Log("Damaged Player: " + _health);
-
+        
+        _healthBarScript.UpdateHealth(-hp);
+        
         if (_health <= 0)
         {
-            PlayerDied();
+            Invoke(nameof(PlayerDied), 1.1f);
         }
     }
 
     public void PlayerDied()
     {
-        Debug.Log("Player is dead");
         SceneManager.LoadScene(0);
     }
 
